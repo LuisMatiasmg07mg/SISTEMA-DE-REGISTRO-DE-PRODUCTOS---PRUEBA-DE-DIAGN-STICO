@@ -1,0 +1,86 @@
+========================================================================
+SISTEMA DE REGISTRO DE PRODUCTOS - PRUEBA DE DIAGNÓSTICO
+========================================================================
+
+Este es un sistema web completo para el registro y validación de productos. 
+Está desarrollado cumpliendo de forma estricta las especificaciones de no utilizar
+frameworks ni librerías de terceros (sin Bootstrap, sin Tailwind, sin jQuery, sin frameworks backend).
+
+------------------------------------------------------------------------
+1. TECNOLOGÍAS UTILIZADAS Y VERSIONES
+------------------------------------------------------------------------
+- Frontend:
+  * HTML5: Maquetación estructurada y semántica nativa.
+  * CSS3: Diseño personalizado con CSS nativo.
+  * Vanilla JavaScript (ES6+): Control de interfaz, manipulación del DOM y Fetch API para AJAX.
+- Backend:
+  * PHP Puro (Versión recomendada: 8.x / Compatible desde 7.4 o superior): Endpoints de respuesta JSON.
+  * PDO (PHP Data Objects): Conexión segura e interacción con la BD mediante consultas preparadas.
+- Base de Datos:
+  * PostgreSQL (Versión recomendada: 12 o superior): Motor relacional para el almacenamiento persistente.
+
+------------------------------------------------------------------------
+2. REQUISITOS PREVIOS DEL SISTEMA
+------------------------------------------------------------------------
+- Un servidor local Apache con soporte para PHP (como XAMPP, Laragon, WAMP o Docker).
+- Las extensiones de PHP `pdo` y `pdo_pgsql` deben estar habilitadas en tu archivo `php.ini`.
+- Instancia activa de PostgreSQL corriendo en el puerto por defecto (5432) o el de su preferencia.
+
+------------------------------------------------------------------------
+3. PASOS PARA LA INSTALACIÓN Y CONFIGURACIÓN
+------------------------------------------------------------------------
+
+Paso 1: Configurar la Base de Datos (PostgreSQL)
+1. Conéctese a su servidor PostgreSQL (mediante pgAdmin, DBeaver, psql u otra herramienta).
+2. Cree una base de datos con el nombre:
+   CREATE DATABASE productos_db;
+3. Seleccione la base de datos e introduzca/ejecute las sentencias SQL contenidas en el archivo:
+   sql/database.sql
+   (Este archivo contiene la creación de tablas, relaciones de claves foráneas e inserción de datos iniciales/semillas para Bodegas, Sucursales, Monedas y Materiales).
+
+Paso 2: Configurar las Credenciales en PHP
+1. Abra el archivo: php/db.php
+2. Modifique las variables de conexión con sus credenciales locales de PostgreSQL:
+   $host = 'localhost';
+   $port = '5432';
+   $dbname = 'productos_db'; 
+   $username = 'tu_usuario_postgres'; 
+   $password = 'tu_contraseña_postgres';
+
+Paso 3: Servidor Web Local
+1. Copie o clone toda la carpeta de este proyecto ("Prueba diagnostico") a la raíz de documentos de su servidor web:
+   * En XAMPP (Windows): C:\xampp\htdocs\Prueba diagnostico
+   * En Laragon (Windows): C:\laragon\www\Prueba diagnostico
+   * En Linux/Apache por defecto: /var/www/html/Prueba diagnostico
+2. Inicie sus servidores Apache y PostgreSQL.
+
+------------------------------------------------------------------------
+4. INSTRUCCIONES DE USO DEL FORMULARIO
+------------------------------------------------------------------------
+1. Abra su navegador web e ingrese a la ruta local:
+   http://localhost/Prueba%20diagnostico/index.html
+2. El formulario cargará de manera dinámica los datos de Bodegas, Monedas y Materiales directamente desde la base de datos PostgreSQL.
+3. El campo "Sucursal" permanecerá deshabilitado hasta que seleccione una "Bodega". Una vez seleccionada, las sucursales correspondientes a esa bodega se cargarán dinámicamente.
+
+------------------------------------------------------------------------
+5. ESTRUCTURA DE ARCHIVOS DEL PROYECTO
+------------------------------------------------------------------------
+- /css/styles.css        -> Estilos visuales del formulario y las alertas.
+- /js/main.js            -> Lógica de interacción JS, Fetch API para AJAX y validaciones JS del lado del cliente.
+- /php/db.php            -> Configuración de conexión PDO con la base de datos.
+- /php/check_codigo.php  -> Endpoint para verificar la unicidad del código en tiempo real.
+- /php/get_bodegas.php   -> Consulta de bodegas registradas.
+- /php/get_sucursales.php-> Consulta de sucursales filtradas por la bodega elegida.
+- /php/get_monedas.php   -> Consulta de monedas.
+- /php/get_materiales.php-> Consulta de materiales.
+- /php/save_producto.php -> Endpoint que realiza la validación de doble capa en el servidor e inserta el producto con sus relaciones.
+- /sql/database.sql      -> Script estructurado e inserción de semillas SQL.
+- index.html             -> Página principal del formulario del producto.
+- LEEME.txt              -> Este archivo de documentación técnica.
+
+------------------------------------------------------------------------
+6. CONSIDERACIONES IMPORTANTES
+------------------------------------------------------------------------
+- Todas las validaciones de campos requeridos se hacen en JS y no usando el atributo nativo `required` de HTML.
+- Se implementó una validación de doble capa (Frontend en JS y Backend en PHP) para asegurar la consistencia e integridad de los datos.
+- Los endpoints backend devuelven respuestas en formato JSON estructurado.
